@@ -8,7 +8,9 @@ import intellimate.izou.system.Context;
 import intellimate.izou.system.Identification;
 import intellimate.izou.system.IdentificationManager;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Created by LeanderK on 13/11/14.
@@ -31,17 +33,22 @@ public class TestActivator extends Activator{
     @Override
     public void activatorStarts() throws InterruptedException {
         System.out.println("TestActivator started");
-        String eventDescriptor = propertiesContainer.getProperties().getProperty("event");
-        if(eventDescriptor != null) switch (eventDescriptor) {
-            case "FullWelcome" : eventDescriptor = Event.FULL_WELCOME_EVENT;
-                break;
-            case "MajorWelcome" : eventDescriptor = Event.MAJOR_WELCOME_EVENT;
-                break;
-            case "MinorWelcome" : eventDescriptor = Event.MINOR_WELCOME_EVENT;
-                break;
-            default: break;
+        List<String> descriptors = propertiesContainer.getProperties().stringPropertyNames().stream()
+                .map(string -> propertiesContainer.getProperties().getProperty(string))
+                .collect(Collectors.toList());
+        if(descriptors.contains("FullWelcome")) {
+            descriptors.remove("FullWelcome");
+            descriptors.add(Event.FULL_WELCOME_EVENT);
         }
-        if(eventDescriptor == null || eventDescriptor.isEmpty()) eventDescriptor = Event.FULL_WELCOME_EVENT;
+        if(descriptors.contains("MajorWelcome")) {
+            descriptors.remove("MajorWelcome");
+            descriptors.add(Event.MAJOR_WELCOME_EVENT);
+        }
+        if(descriptors.contains("MinorWelcome")) {
+            descriptors.remove("MinorWelcome");
+            descriptors.add(Event.MINOR_WELCOME_EVENT);
+        }
+        if(descriptors.isEmpty()) descriptors.add(Event.FULL_WELCOME_EVENT);
         Optional<Identification> id = IdentificationManager.getInstance().getIdentification(this);
         if(!id.isPresent()) {
             context.logger.getLogger().error(new Exception("Unable to obtain ID"));
@@ -52,6 +59,7 @@ public class TestActivator extends Activator{
             context.logger.getLogger().error(new Exception("Unable to create Event"));
             return;
         }
+        descriptors.forEach(description -> event.get().addDescriptor(description));
         try {
             fireEvent(event.get());
             System.out.println("TestActivator fired Event");

@@ -7,13 +7,13 @@
     <groupId>leanderk.izou.testactivator</groupId>
     <artifactId>testactivator</artifactId>
     <packaging>jar</packaging>
-    <version>0.5-SNAPSHOT</version>
+    <version>0.6-SNAPSHOT</version>
     <name></name>
 
     <properties>
         <plugin.id>leanderk.izou.testactivator</plugin.id>
         <plugin.class>leanderk.izou.testactivator.ZipFileManager</plugin.class>
-        <plugin.version>0.5</plugin.version>
+        <plugin.version>0.6</plugin.version>
         <plugin.provider>Leander Kurscheidt</plugin.provider>
         <plugin.dependencies />
     </properties>

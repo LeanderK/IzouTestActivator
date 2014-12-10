@@ -1,0 +1,5 @@
+#to add event descriptions, simply add key/value pairs (keys get ignored).
+#there is a short notation for:
+#Event.FullWelcome : FullWelcome
+#Event.MajorWelcome : MajorWelcome
+#Event.MinorWelcome : MinorWelcome

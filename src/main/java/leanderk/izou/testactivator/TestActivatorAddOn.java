@@ -38,7 +38,7 @@ public class TestActivatorAddOn extends AddOn{
     @Override
     public Activator[] registerActivator() {
         Activator[] activators = new Activator[1];
-        activators[0] = new TestActivator(getPropertiesContainer());
+        activators[0] = new TestActivator(getPropertiesContainer(), getContext());
         return activators;
     }
 
