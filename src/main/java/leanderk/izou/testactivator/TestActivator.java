@@ -3,13 +3,11 @@ package leanderk.izou.testactivator;
 import intellimate.izou.activator.Activator;
 import intellimate.izou.addon.PropertiesContainer;
 import intellimate.izou.events.Event;
-import intellimate.izou.events.LocalEventManager;
+import intellimate.izou.events.MultipleEventsException;
 import intellimate.izou.system.Context;
-import intellimate.izou.system.Identification;
 import intellimate.izou.system.IdentificationManager;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -49,7 +47,9 @@ public class TestActivator extends Activator{
             descriptors.add(Event.MINOR_WELCOME_EVENT);
         }
         if(descriptors.isEmpty()) descriptors.add(Event.FULL_WELCOME_EVENT);
+        /*
         Optional<Identification> id = IdentificationManager.getInstance().getIdentification(this);
+                
         if(!id.isPresent()) {
             context.logger.getLogger().error(new Exception("Unable to obtain ID"));
             return;
@@ -59,7 +59,9 @@ public class TestActivator extends Activator{
             context.logger.getLogger().error(new Exception("Unable to create Event"));
             return;
         }
-        descriptors.forEach(description -> event.get().addDescriptor(description));
+        for (String descriptor : descriptors) {
+            event
+        }
         try {
             fireEvent(event.get());
             System.out.println("TestActivator fired Event");
@@ -67,11 +69,25 @@ public class TestActivator extends Activator{
             context.logger.getLogger().debug(e);
             e.printStackTrace();
         }
+        */
+        Event event = IdentificationManager.getInstance().getIdentification(this)
+                .flatMap(id -> Event.createEvent(Event.RESPONSE, id))
+                .orElseThrow(() -> new IllegalStateException("unable to create Event"));
+
+        for (String descriptor : descriptors) {
+            event = event.addDescriptor(descriptor);
+        }
+
+        try {
+            fireEvent(event);
+        } catch (MultipleEventsException e) {
+            context.logger.getLogger().error("unable to fire event", e);
+        }
     }
 
     /**
      * This method gets called when the Activator Thread got exceptionThrown.
-     * <p/>
+     * <p>
      * This is an unusual way of ending a thread. The main reason for this should be, that the activator was interrupted
      * by an uncaught exception.
      *

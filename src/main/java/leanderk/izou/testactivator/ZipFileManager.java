@@ -11,7 +11,7 @@ public class ZipFileManager extends intellimate.izou.addon.ZipFileManager{
      * Your plugins have to provide constructor with this exact signature to
      * be successfully loaded by manager.
      *
-     * @param wrapper
+     * @param wrapper wrapper
      */
     public ZipFileManager(PluginWrapper wrapper) {
         super(wrapper);
