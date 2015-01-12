@@ -3,3 +3,5 @@
 #Event.FullWelcome : FullWelcome
 #Event.MajorWelcome : MajorWelcome
 #Event.MinorWelcome : MinorWelcome
+#to set the type to Notification, add:
+#setTypeTpNotification = true

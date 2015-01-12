@@ -16,7 +16,7 @@
         <plugin.version>0.8</plugin.version>
         <plugin.provider>Leander Kurscheidt</plugin.provider>
         <plugin.dependencies />
-        <repo.name>IzouPersonalInformation</repo.name>
+        <repo.name>IzouTestActivator</repo.name>
         <repo.owner>LeanderK</repo.owner>
         <!-- github server corresponds to entry in ~/.m2/settings.xml -->
         <github.global.server>github</github.global.server>

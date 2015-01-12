@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class TestActivator extends Activator{
     public static final String ID = TestActivator.class.getCanonicalName();
     private final PropertiesContainer propertiesContainer;
+    private static final String EVENT_TYPE_NOTIFICATION = "setTypeTpNotification";
     private Context context;
 
     TestActivator(PropertiesContainer propertiesContainer, Context context) {
@@ -47,31 +48,16 @@ public class TestActivator extends Activator{
             descriptors.add(Event.MINOR_WELCOME_EVENT);
         }
         if(descriptors.isEmpty()) descriptors.add(Event.FULL_WELCOME_EVENT);
-        /*
-        Optional<Identification> id = IdentificationManager.getInstance().getIdentification(this);
-                
-        if(!id.isPresent()) {
-            context.logger.getLogger().error(new Exception("Unable to obtain ID"));
-            return;
+        String type;
+        String eventTypePreference = propertiesContainer.getProperties().getProperty(EVENT_TYPE_NOTIFICATION);
+        if (eventTypePreference != null && eventTypePreference.equals("true")) {
+            type = Event.NOTIFICATION;
+        } else {
+            type = Event.RESPONSE;
         }
-        Optional<Event> event = Event.createEvent(Event.RESPONSE, id.get());
-        if(!event.isPresent()) {
-            context.logger.getLogger().error(new Exception("Unable to create Event"));
-            return;
-        }
-        for (String descriptor : descriptors) {
-            event
-        }
-        try {
-            fireEvent(event.get());
-            System.out.println("TestActivator fired Event");
-        } catch (LocalEventManager.MultipleEventsException e) {
-            context.logger.getLogger().debug(e);
-            e.printStackTrace();
-        }
-        */
+
         Event event = IdentificationManager.getInstance().getIdentification(this)
-                .flatMap(id -> Event.createEvent(Event.RESPONSE, id))
+                .flatMap(id -> Event.createEvent(type, id))
                 .orElseThrow(() -> new IllegalStateException("unable to create Event"));
 
         for (String descriptor : descriptors) {
